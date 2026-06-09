@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysMenuMapper">
+
+    <resultMap type="com.ruoyi.system.domain.entity.SysMenu" id="SysMenuResult">
+        <id property="menuId" column="menu_id"/>
+        <result property="menuName" column="menu_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="path" column="path"/>
+        <result property="component" column="component"/>
+        <result property="query" column="query"/>
+        <result property="isFrame" column="is_frame"/>
+        <result property="isCache" column="is_cache"/>
+        <result property="menuType" column="menu_type"/>
+        <result property="visible" column="visible"/>
+        <result property="status" column="status"/>
+        <result property="perms" column="perms"/>
+        <result property="icon" column="icon"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectMenuVo">
+        select menu_id, menu_name, parent_id, order_num, path, component, query,
+               is_frame, is_cache, menu_type, visible, status, perms, icon,
+               create_by, create_time, update_by, update_time, remark
+        from sys_menu
+    </sql>
+
+    <select id="selectMenuList" parameterType="com.ruoyi.system.domain.entity.SysMenu" resultMap="SysMenuResult">
+        <include refid="selectMenuVo"/>
+        <where>
+            del_flag = '0'
+            <if test="menuName != null and menuName != ''">
+                and menu_name like concat('%', #{menuName}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="visible != null and visible != ''">
+                and visible = #{visible}
+            </if>
+        </where>
+        order by parent_id, order_num
+    </select>
+
+    <select id="selectMenuById" parameterType="Long" resultMap="SysMenuResult">
+        <include refid="selectMenuVo"/>
+        where menu_id = #{menuId} and del_flag = '0'
+    </select>
+
+    <insert id="insertMenu" parameterType="com.ruoyi.system.domain.entity.SysMenu" useGeneratedKeys="true" keyProperty="menuId">
+        insert into sys_menu (
+            menu_name, parent_id, order_num, path, component, query,
+            is_frame, is_cache, menu_type, visible, status, perms, icon,
+            create_by, create_time, remark
+        ) values (
+            #{menuName}, #{parentId}, #{orderNum}, #{path}, #{component}, #{query},
+            #{isFrame}, #{isCache}, #{menuType}, #{visible}, #{status}, #{perms}, #{icon},
+            #{createBy}, sysdate(), #{remark}
+        )
+    </insert>
+
+    <update id="updateMenu" parameterType="com.ruoyi.system.domain.entity.SysMenu">
+        update sys_menu
+        <set>
+            <if test="menuName != null">menu_name = #{menuName},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="path != null">path = #{path},</if>
+            <if test="component != null">component = #{component},</if>
+            <if test="query != null">query = #{query},</if>
+            <if test="isFrame != null">is_frame = #{isFrame},</if>
+            <if test="isCache != null">is_cache = #{isCache},</if>
+            <if test="menuType != null">menu_type = #{menuType},</if>
+            <if test="visible != null">visible = #{visible},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="perms != null">perms = #{perms},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate(),
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where menu_id = #{menuId}
+    </update>
+
+    <delete id="deleteMenuById" parameterType="Long">
+        update sys_menu set del_flag = '2' where menu_id = #{menuId}
+    </delete>
+
+    <select id="selectMenuPermsByUserId" parameterType="Long" resultType="String">
+        select distinct m.perms
+        from sys_menu m
+        inner join sys_role_menu rm on m.menu_id = rm.menu_id
+        inner join sys_user_role ur on rm.role_id = ur.role_id
+        where ur.user_id = #{userId} and m.status = '0' and m.perms is not null and m.perms != ''
+    </select>
+
+    <select id="selectMenuIdsByRoleId" parameterType="Long" resultType="Long">
+        select menu_id from sys_role_menu where role_id = #{roleId}
+    </select>
+
+</mapper>

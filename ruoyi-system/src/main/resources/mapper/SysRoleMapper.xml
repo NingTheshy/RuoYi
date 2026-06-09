@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysRoleMapper">
+
+    <resultMap type="com.ruoyi.system.domain.entity.SysRole" id="SysRoleResult">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="roleKey" column="role_key"/>
+        <result property="roleSort" column="role_sort"/>
+        <result property="dataScope" column="data_scope"/>
+        <result property="menuCheckStrictly" column="menu_check_strictly"/>
+        <result property="deptCheckStrictly" column="dept_check_strictly"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectRoleVo">
+        select role_id, role_name, role_key, role_sort, data_scope, menu_check_strictly,
+               dept_check_strictly, status, del_flag, create_by, create_time, update_by, update_time, remark
+        from sys_role
+    </sql>
+
+    <select id="selectRoleList" parameterType="com.ruoyi.system.domain.entity.SysRole" resultMap="SysRoleResult">
+        <include refid="selectRoleVo"/>
+        <where>
+            del_flag = '0'
+            <if test="roleName != null and roleName != ''">
+                and role_name like concat('%', #{roleName}, '%')
+            </if>
+            <if test="roleKey != null and roleKey != ''">
+                and role_key like concat('%', #{roleKey}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by role_sort
+    </select>
+
+    <select id="selectRoleById" parameterType="Long" resultMap="SysRoleResult">
+        <include refid="selectRoleVo"/>
+        where role_id = #{roleId} and del_flag = '0'
+    </select>
+
+    <insert id="insertRole" parameterType="com.ruoyi.system.domain.entity.SysRole" useGeneratedKeys="true" keyProperty="roleId">
+        insert into sys_role (
+            role_name, role_key, role_sort, data_scope, menu_check_strictly,
+            dept_check_strictly, status, del_flag, create_by, create_time, remark
+        ) values (
+            #{roleName}, #{roleKey}, #{roleSort}, #{dataScope}, #{menuCheckStrictly},
+            #{deptCheckStrictly}, #{status}, #{delFlag}, #{createBy}, sysdate(), #{remark}
+        )
+    </insert>
+
+    <update id="updateRole" parameterType="com.ruoyi.system.domain.entity.SysRole">
+        update sys_role
+        <set>
+            <if test="roleName != null">role_name = #{roleName},</if>
+            <if test="roleKey != null">role_key = #{roleKey},</if>
+            <if test="roleSort != null">role_sort = #{roleSort},</if>
+            <if test="dataScope != null">data_scope = #{dataScope},</if>
+            <if test="menuCheckStrictly != null">menu_check_strictly = #{menuCheckStrictly},</if>
+            <if test="deptCheckStrictly != null">dept_check_strictly = #{deptCheckStrictly},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate(),
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where role_id = #{roleId}
+    </update>
+
+    <update id="deleteRoleByIds" parameterType="Long">
+        update sys_role set del_flag = '2' where role_id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </update>
+
+    <delete id="deleteRoleMenuByRoleIds" parameterType="Long">
+        delete from sys_role_menu where role_id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+    <insert id="insertRoleMenu">
+        insert into sys_role_menu (role_id, menu_id) values
+        <foreach item="menuId" collection="menuIds" separator=",">
+            (#{roleId}, #{menuId})
+        </foreach>
+    </insert>
+
+</mapper>
