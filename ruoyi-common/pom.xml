@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.ruoyi</groupId>
+        <artifactId>ruoyi-rbac</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>ruoyi-common</artifactId>
+    <packaging>pom</packaging>
+    <name>ruoyi-common</name>
+
+    <modules>
+        <module>ruoyi-common-core</module>
+        <module>ruoyi-common-redis</module>
+        <module>ruoyi-common-security</module>
+    </modules>
+</project>
