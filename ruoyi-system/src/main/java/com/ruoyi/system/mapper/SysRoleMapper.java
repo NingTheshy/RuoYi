@@ -22,4 +22,6 @@ public interface SysRoleMapper {
     int deleteRoleMenuByRoleIds(Long[] roleIds);
 
     int insertRoleMenu(@Param("roleId") Long roleId, @Param("menuIds") Long[] menuIds);
+
+    List<String> selectRoleKeysByUserId(Long userId);
 }
