@@ -21,4 +21,6 @@ public interface ISysUserService {
     int resetPassword(Long userId, String password);
 
     int updateUserStatus(Long userId, String status);
+
+    int updateUserLoginInfo(Long userId, String loginIp);
 }

@@ -89,4 +89,9 @@ public class SysUserServiceImpl implements ISysUserService {
         user.setStatus(status);
         return userMapper.updateUser(user);
     }
+
+    @Override
+    public int updateUserLoginInfo(Long userId, String loginIp) {
+        return userMapper.updateUserLoginInfo(userId, loginIp);
+    }
 }
