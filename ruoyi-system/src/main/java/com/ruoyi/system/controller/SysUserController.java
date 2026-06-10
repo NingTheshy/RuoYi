@@ -1,7 +1,6 @@
 package com.ruoyi.system.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.core.domain.PageResult;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.system.domain.entity.SysUser;
@@ -22,10 +21,8 @@ public class SysUserController {
     public R<PageResult<SysUser>> list(SysUser user,
                                         @RequestParam(defaultValue = "1") Integer pageNum,
                                         @RequestParam(defaultValue = "10") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        java.util.List<SysUser> list = userService.selectUserList(user);
-        PageInfo<SysUser> pageInfo = new PageInfo<>(list);
-        return R.ok(new PageResult<>(list, pageInfo.getTotal()));
+        Page<SysUser> page = userService.selectUserPage(new Page<>(pageNum, pageSize), user);
+        return R.ok(new PageResult<>(page.getRecords(), page.getTotal()));
     }
 
     @PreAuthorize("hasAuthority('system:user:query')")

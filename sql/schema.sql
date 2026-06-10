@@ -1,6 +1,6 @@
 -- schema.sql
-CREATE DATABASE IF NOT EXISTS `ry-vue` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `ry-vue`;
+CREATE DATABASE IF NOT EXISTS `ry` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `ry`;
 
 -- ----------------------------
 -- 用户表
@@ -96,6 +96,7 @@ CREATE TABLE sys_dept (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_by   VARCHAR(64) DEFAULT '' COMMENT '更新者',
     update_time DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    remark      VARCHAR(500) DEFAULT NULL COMMENT '备注',
     PRIMARY KEY (dept_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='部门表';
 

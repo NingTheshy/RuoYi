@@ -1,7 +1,6 @@
 package com.ruoyi.system.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.core.domain.PageResult;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.system.domain.entity.SysRole;
@@ -28,10 +27,8 @@ public class SysRoleController {
     public R<PageResult<SysRole>> list(SysRole role,
                                        @RequestParam(defaultValue = "1") Integer pageNum,
                                        @RequestParam(defaultValue = "10") Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<SysRole> list = roleService.selectRoleList(role);
-        PageInfo<SysRole> pageInfo = new PageInfo<>(list);
-        return R.ok(new PageResult<>(list, pageInfo.getTotal()));
+        Page<SysRole> page = roleService.selectRolePage(new Page<>(pageNum, pageSize), role);
+        return R.ok(new PageResult<>(page.getRecords(), page.getTotal()));
     }
 
     @PreAuthorize("hasAuthority('system:role:query')")

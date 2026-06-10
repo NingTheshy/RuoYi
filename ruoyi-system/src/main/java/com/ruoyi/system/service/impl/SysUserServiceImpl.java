@@ -1,72 +1,87 @@
 package com.ruoyi.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.annotation.DataScope;
 import com.ruoyi.common.core.constant.Constants;
 import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.system.domain.entity.SysUser;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class SysUserServiceImpl implements ISysUserService {
-
-    @Autowired
-    private SysUserMapper userMapper;
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     public SysUser selectUserByUserName(String userName) {
-        return userMapper.selectUserByUserName(userName);
+        return baseMapper.selectUserByUserName(userName);
     }
 
     @Override
     public SysUser selectUserById(Long userId) {
-        return userMapper.selectUserById(userId);
+        return getById(userId);
     }
 
     @Override
+    @DataScope(alias = "", userIdColumn = "user_id", deptIdColumn = "dept_id")
     public List<SysUser> selectUserList(SysUser user) {
-        return userMapper.selectUserList(user);
+        return baseMapper.selectUserList(user);
+    }
+
+    @Override
+    @DataScope(alias = "", userIdColumn = "user_id", deptIdColumn = "dept_id")
+    public Page<SysUser> selectUserPage(Page<SysUser> page, SysUser query) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(StringUtils.hasText(query.getUserName()), SysUser::getUserName, query.getUserName())
+                .like(StringUtils.hasText(query.getStatus()), SysUser::getStatus, query.getStatus())
+                .eq(query.getDeptId() != null, SysUser::getDeptId, query.getDeptId())
+                .orderByAsc(SysUser::getCreateTime);
+        return baseMapper.selectPage(page, wrapper);
     }
 
     @Override
     @Transactional
     public int insertUser(SysUser user) {
-        SysUser existing = userMapper.selectUserByUserName(user.getUserName());
+        SysUser existing = baseMapper.selectUserByUserName(user.getUserName());
         if (existing != null) {
             throw new ServiceException("用户名'" + user.getUserName() + "'已存在");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setDelFlag(Constants.DEL_FLAG_NORMAL);
-        return userMapper.insertUser(user);
+        return save(user) ? 1 : 0;
     }
 
     @Override
     @Transactional
     public int updateUser(SysUser user) {
-        SysUser existing = userMapper.selectUserById(user.getUserId());
+        SysUser existing = getById(user.getUserId());
         if (existing == null) {
             throw new ServiceException("用户不存在");
         }
-        return userMapper.updateUser(user);
+        return updateById(user) ? 1 : 0;
     }
 
     @Override
     @Transactional
     public int deleteUserByIds(Long[] userIds) {
-        for (Long userId : userIds) {
+        Arrays.stream(userIds).forEach(userId -> {
             if (userId == 1L) {
                 throw new ServiceException("不允许删除超级管理员");
             }
-        }
-        return userMapper.deleteUserByIds(userIds);
+        });
+        return removeByIds(Arrays.asList(userIds)) ? userIds.length : 0;
     }
 
     @Override
@@ -75,7 +90,7 @@ public class SysUserServiceImpl implements ISysUserService {
         SysUser user = new SysUser();
         user.setUserId(userId);
         user.setPassword(passwordEncoder.encode(password));
-        return userMapper.updateUser(user);
+        return updateById(user) ? 1 : 0;
     }
 
     @Override
@@ -87,11 +102,11 @@ public class SysUserServiceImpl implements ISysUserService {
         SysUser user = new SysUser();
         user.setUserId(userId);
         user.setStatus(status);
-        return userMapper.updateUser(user);
+        return updateById(user) ? 1 : 0;
     }
 
     @Override
     public int updateUserLoginInfo(Long userId, String loginIp) {
-        return userMapper.updateUserLoginInfo(userId, loginIp);
+        return baseMapper.updateUserLoginInfo(userId, loginIp);
     }
 }

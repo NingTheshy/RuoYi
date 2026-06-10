@@ -1,22 +1,13 @@
 package com.ruoyi.system.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.system.domain.entity.SysMenu;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Mapper
-public interface SysMenuMapper {
+public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
     List<SysMenu> selectMenuList(SysMenu menu);
-
-    SysMenu selectMenuById(Long menuId);
-
-    int insertMenu(SysMenu menu);
-
-    int updateMenu(SysMenu menu);
-
-    int deleteMenuById(Long menuId);
 
     List<String> selectMenuPermsByUserId(Long userId);
 

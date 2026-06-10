@@ -6,6 +6,8 @@ import com.ruoyi.common.security.service.TokenService;
 import com.ruoyi.system.domain.entity.SysUser;
 import com.ruoyi.system.domain.vo.LoginBody;
 import com.ruoyi.system.domain.vo.LoginUser;
+import com.ruoyi.system.domain.vo.RegisterBody;
+import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.service.ISysMenuService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
@@ -13,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -36,6 +39,38 @@ public class AuthController {
 
     @Autowired
     private ISysMenuService menuService;
+
+    @Autowired
+    private SysUserMapper userMapper;
+
+    @PostMapping("/register")
+    @Transactional
+    public R<Void> register(@RequestBody RegisterBody registerBody) {
+        if (registerBody.getUsername() == null || registerBody.getUsername().isBlank()) {
+            return R.fail("用户名不能为空");
+        }
+        if (registerBody.getPassword() == null || registerBody.getPassword().isBlank()) {
+            return R.fail("密码不能为空");
+        }
+        if (registerBody.getNickname() == null || registerBody.getNickname().isBlank()) {
+            return R.fail("昵称不能为空");
+        }
+
+        SysUser user = new SysUser();
+        user.setUserName(registerBody.getUsername());
+        user.setPassword(registerBody.getPassword());
+        user.setNickName(registerBody.getNickname());
+        user.setEmail(registerBody.getEmail());
+        user.setPhonenumber(registerBody.getPhonenumber());
+        user.setStatus("0");
+
+        userService.insertUser(user);
+
+        // 分配默认角色（普通角色 roleId=2）
+        userMapper.insertUserRole(user.getUserId(), 2L);
+
+        return R.ok();
+    }
 
     @PostMapping("/login")
     public R<LoginUser> login(@RequestBody LoginBody loginBody, HttpServletRequest request) {

@@ -1,23 +1,14 @@
 package com.ruoyi.system.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.system.domain.entity.SysRole;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-@Mapper
-public interface SysRoleMapper {
+public interface SysRoleMapper extends BaseMapper<SysRole> {
 
     List<SysRole> selectRoleList(SysRole role);
-
-    SysRole selectRoleById(Long roleId);
-
-    int insertRole(SysRole role);
-
-    int updateRole(SysRole role);
-
-    int deleteRoleByIds(Long[] roleIds);
 
     int deleteRoleMenuByRoleIds(Long[] roleIds);
 
