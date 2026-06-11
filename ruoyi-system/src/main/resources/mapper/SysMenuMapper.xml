@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    菜单 Mapper XML
+    对应接口：com.ruoyi.system.mapper.SysMenuMapper
+    数据表：sys_menu, sys_role_menu, sys_user_role
+
+    包含以下 SQL 操作：
+    - selectMenuList：条件查询菜单列表
+    - selectMenuPermsByUserId：查询用户的权限标识列表
+    - selectMenuIdsByRoleId：查询角色关联的菜单 ID 列表
+-->
 <mapper namespace="com.ruoyi.system.mapper.SysMenuMapper">
 
+    <!-- 菜单表公共列 -->
+    <sql id="menuColumns">
+        menu_id, menu_name, parent_id, order_num, path, component, query,
+        is_frame, is_cache, menu_type, visible, status, perms, icon,
+        del_flag, create_by, create_time, update_by, update_time, remark
+    </sql>
+
+    <!-- 条件查询菜单列表（支持菜单名/状态/可见性筛选） -->
     <select id="selectMenuList" resultType="com.ruoyi.system.domain.entity.SysMenu">
-        select * from sys_menu
+        select <include refid="menuColumns"/>
+        from sys_menu
         <where>
             del_flag = '0'
             <if test="menuName != null and menuName != ''">
@@ -19,6 +38,7 @@
         order by parent_id, order_num
     </select>
 
+    <!-- 查询用户的权限标识列表（用户→角色→菜单 三级关联） -->
     <select id="selectMenuPermsByUserId" resultType="String">
         select distinct m.perms
         from sys_menu m
@@ -27,6 +47,7 @@
         where ur.user_id = #{userId} and m.status = '0' and m.perms is not null and m.perms != ''
     </select>
 
+    <!-- 查询角色关联的菜单 ID 列表（用于角色编辑时回显） -->
     <select id="selectMenuIdsByRoleId" resultType="Long">
         select menu_id from sys_role_menu where role_id = #{roleId}
     </select>

@@ -4,17 +4,8 @@ server:
 spring:
   application:
     name: ruoyi
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ry?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
-    username: root
-    password: root
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: root
-      database: 0
+  profiles:
+    active: dev
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -24,7 +15,6 @@ mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
 
 jwt:
-  secret: YourSuperSecretKeyForJWTTokenGenerationMustBeLongEnough123456
   expiration: 86400000
 
 ruoyi:

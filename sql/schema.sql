@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS sys_user;
 CREATE TABLE sys_user (
     user_id       BIGINT NOT NULL AUTO_INCREMENT COMMENT '用户ID',
     dept_id       BIGINT DEFAULT NULL COMMENT '部门ID',
-    user_name     VARCHAR(30) NOT NULL COMMENT '用户账号',
+    user_name     VARCHAR(30) NOT NULL UNIQUE COMMENT '用户账号',
     nick_name     VARCHAR(30) NOT NULL COMMENT '用户昵称',
     email         VARCHAR(50) DEFAULT '' COMMENT '邮箱',
     phonenumber   VARCHAR(11) DEFAULT '' COMMENT '手机号',
@@ -35,7 +35,7 @@ DROP TABLE IF EXISTS sys_role;
 CREATE TABLE sys_role (
     role_id             BIGINT NOT NULL AUTO_INCREMENT COMMENT '角色ID',
     role_name           VARCHAR(30) NOT NULL COMMENT '角色名称',
-    role_key            VARCHAR(100) NOT NULL COMMENT '角色权限字符串',
+    role_key            VARCHAR(100) NOT NULL UNIQUE COMMENT '角色权限字符串',
     role_sort           INT NOT NULL COMMENT '显示顺序',
     data_scope          CHAR(1) DEFAULT '1' COMMENT '数据范围',
     menu_check_strictly TINYINT(1) DEFAULT 1 COMMENT '菜单树选择项是否关联',
@@ -74,6 +74,7 @@ CREATE TABLE sys_menu (
     update_by   VARCHAR(64) DEFAULT '' COMMENT '更新者',
     update_time DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     remark      VARCHAR(500) DEFAULT '' COMMENT '备注',
+    del_flag    CHAR(1) DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
     PRIMARY KEY (menu_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 COMMENT='菜单权限表';
 

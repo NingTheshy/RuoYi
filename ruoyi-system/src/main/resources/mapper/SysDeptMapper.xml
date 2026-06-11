@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    部门 Mapper XML
+    对应接口：com.ruoyi.system.mapper.SysDeptMapper
+    数据表：sys_dept
+
+    包含以下 SQL 操作：
+    - selectDeptList：条件查询部门列表（支持树形结构组装）
+-->
 <mapper namespace="com.ruoyi.system.mapper.SysDeptMapper">
 
+    <!-- 部门表公共列 -->
+    <sql id="deptColumns">
+        dept_id, parent_id, ancestors, dept_name, order_num, leader, phone,
+        email, status, del_flag, create_by, create_time, update_by, update_time, remark
+    </sql>
+
+    <!-- 条件查询部门列表（按 parent_id 和 order_num 排序，便于前端组装树形结构） -->
     <select id="selectDeptList" resultType="com.ruoyi.system.domain.entity.SysDept">
-        select * from sys_dept
+        select <include refid="deptColumns"/>
+        from sys_dept
         <where>
             del_flag = '0'
             <if test="deptName != null and deptName != ''">
