@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    用户 Mapper XML
+    对应接口：com.ruoyi.system.mapper.SysUserMapper
+    数据表：sys_user
+
+    包含以下 SQL 操作：
+    - selectUserByUserName：根据用户名查询用户（登录/注册校验）
+    - selectUserList：条件查询用户列表
+    - updateUserLoginInfo：更新登录 IP 和时间
+    - insertUserRole：插入用户-角色关联（INSERT IGNORE 避免重复）
+    - deleteUserRoles：删除用户的所有角色关联
+    - selectUserRoleIds：查询用户的角色 ID 列表
+-->
+<mapper namespace="com.ruoyi.system.mapper.SysUserMapper">
+
+    <!-- 用户表公共列（包含密码，用于登录/注册等需要密码验证的场景） -->
+    <sql id="userColumns">
+        user_id, dept_id, user_name, nick_name, email, phonenumber, sex, avatar,
+        password, status, del_flag, login_ip, login_date, create_by, create_time,
+        update_by, update_time, remark
+    </sql>
+
+    <!-- 用户表列表查询列（排除密码，避免密码哈希泄露到列表查询结果中） -->
+    <sql id="userColumnsWithoutPassword">
+        user_id, dept_id, user_name, nick_name, email, phonenumber, sex, avatar,
+        status, del_flag, login_ip, login_date, create_by, create_time,
+        update_by, update_time, remark
+    </sql>
+
+    <!-- 根据用户名查询用户（仅查未删除记录） -->
+    <select id="selectUserByUserName" resultType="com.ruoyi.system.domain.entity.SysUser">
+        select <include refid="userColumns"/>
+        from sys_user
+        where user_name = #{userName} and del_flag = '0'
+    </select>
+
+    <!-- 条件查询用户列表（支持用户名/昵称/手机号模糊、状态精确、部门精确、创建时间区间筛选） -->
+    <select id="selectUserList" resultType="com.ruoyi.system.domain.entity.SysUser">
+        select <include refid="userColumnsWithoutPassword"/>
+        from sys_user
+        <where>
+            del_flag = '0'
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="nickName != null and nickName != ''">
+                and nick_name like concat('%', #{nickName}, '%')
+            </if>
+            <if test="phonenumber != null and phonenumber != ''">
+                and phonenumber like concat('%', #{phonenumber}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="deptId != null">
+                and dept_id = #{deptId}
+            </if>
+            <if test="beginTime != null">
+                and create_time <![CDATA[ >= ]]> #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and create_time <![CDATA[ <= ]]> #{endTime}
+            </if>
+        </where>
+        order by create_time
+    </select>
+
+    <!-- 更新用户登录信息（登录 IP + 登录时间） -->
+    <update id="updateUserLoginInfo">
+        update sys_user
+        set login_ip = #{loginIp}, login_date = #{loginDate}
+        where user_id = #{userId}
+    </update>
+
+    <!-- 插入用户-角色关联（INSERT IGNORE 防止重复插入报错） -->
+    <insert id="insertUserRole">
+        insert ignore into sys_user_role (user_id, role_id) values (#{userId}, #{roleId})
+    </insert>
+
+    <!-- 删除用户的所有角色关联（重新分配角色前调用） -->
+    <delete id="deleteUserRoles">
+        delete from sys_user_role where user_id = #{userId}
+    </delete>
+
+    <!-- 查询用户的角色 ID 列表 -->
+    <select id="selectUserRoleIds" resultType="Long">
+        select role_id from sys_user_role where user_id = #{userId}
+    </select>
+
+    <!-- 查询用户所属部门 ID -->
+    <select id="selectDeptIdByUserId" resultType="Long">
+        select dept_id from sys_user where user_id = #{userId} and del_flag = '0'
+    </select>
+
+</mapper>

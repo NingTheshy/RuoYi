@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn compile *)",
+      "Bash(mvn spring-boot:run *)",
+      "Bash(curl *)",
+      "Bash(mysql *)",
+      "Bash(taskkill /F /FI \"WINDOWTITLE eq *ruoyi*\")",
+      "Bash(jps -l)",
+      "Bash(awk '{print $1}')",
+      "Bash(xargs -r kill)",
+      "Bash(netstat -ano)",
+      "Bash(awk '{print $NF}')",
+      "Bash(kill -9 23160)",
+      "Bash(taskkill *)",
+      "Bash(javap -c -p -classpath ruoyi-common/target/classes com.ruoyi.common.security.utils.SecurityUtils)",
+      "Bash(mvn clean *)",
+      "Bash(java *)"
+    ]
+  }
+}

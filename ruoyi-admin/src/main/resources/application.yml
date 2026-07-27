@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: ruoyi
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+
+jwt:
+  expiration: 86400000
+
+ruoyi:
+  security:
+    token-header: Authorization
+    token-prefix: "Bearer "
+
+knife4j:
+  enable: true
+  openapi:
+    title: RuoYi API
+    version: 1.0.0

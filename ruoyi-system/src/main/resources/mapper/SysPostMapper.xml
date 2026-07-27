@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysPostMapper">
+
+    <resultMap id="SysPostResult" type="com.ruoyi.system.domain.entity.SysPost">
+        <id property="postId" column="post_id"/>
+        <result property="postCode" column="post_code"/>
+        <result property="postName" column="post_name"/>
+        <result property="postSort" column="post_sort"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <select id="selectPostList" parameterType="com.ruoyi.system.domain.entity.SysPost" resultMap="SysPostResult">
+        SELECT * FROM sys_post
+        <where>
+            <if test="postName != null and postName != ''">AND post_name LIKE CONCAT('%', #{postName}, '%')</if>
+            <if test="postCode != null and postCode != ''">AND post_code LIKE CONCAT('%', #{postCode}, '%')</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+            AND del_flag = '0'
+        </where>
+        ORDER BY post_sort ASC
+    </select>
+
+    <select id="selectPostByCode" parameterType="String" resultMap="SysPostResult">
+        SELECT * FROM sys_post WHERE post_code = #{postCode} AND del_flag = '0'
+    </select>
+
+    <select id="countUserPost" parameterType="Long" resultType="Long">
+        SELECT COUNT(*) FROM sys_user_post WHERE post_id = #{postId}
+    </select>
+
+</mapper>
