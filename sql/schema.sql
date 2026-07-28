@@ -134,7 +134,6 @@ CREATE TABLE sys_role_dept (
     dept_id BIGINT NOT NULL COMMENT '部门ID',
     PRIMARY KEY (role_id, dept_id)
 ) ENGINE=InnoDB COMMENT='角色和部门关联表';
-
 -- ----------------------------
 -- 索引优化
 -- ----------------------------

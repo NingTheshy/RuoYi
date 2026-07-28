@@ -4,6 +4,9 @@ target/
 # IDE
 .idea/
 *.iml
+.vscode/
+.claude/
+
 
 # OS
 bash.exe.stackdump
