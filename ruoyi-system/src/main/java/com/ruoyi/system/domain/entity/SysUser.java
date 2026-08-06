@@ -81,6 +81,10 @@ public class SysUser extends BaseEntity {
     @TableField(exist = false)
     private List<SysRole> roles;
 
+    /** 部门名称（非数据库字段，用于关联查询） */
+    @TableField(exist = false)
+    private String deptName;
+
     /** 查询条件：创建时间-开始（非数据库字段，仅用于查询） */
     @TableField(exist = false)
     private LocalDateTime beginTime;

@@ -339,3 +339,49 @@ CREATE TABLE sys_login_log (
     INDEX idx_login_log_status (status),
     INDEX idx_login_log_login_time (login_time)
 ) ENGINE=InnoDB AUTO_INCREMENT=100000 COMMENT='登录日志表';
+
+-- ----------------------------
+-- 定时任务表
+-- ----------------------------
+DROP TABLE IF EXISTS sys_job;
+CREATE TABLE sys_job (
+    job_id          BIGINT NOT NULL AUTO_INCREMENT COMMENT '任务ID',
+    job_name        VARCHAR(64) NOT NULL COMMENT '任务名称',
+    job_group       VARCHAR(64) DEFAULT 'DEFAULT' COMMENT '任务分组',
+    job_class_name  VARCHAR(255) NOT NULL COMMENT '任务执行类全限定名',
+    cron_expression VARCHAR(128) NOT NULL COMMENT 'Cron表达式',
+    misfire_policy  VARCHAR(20) DEFAULT '3' COMMENT '错过策略（1立即执行 2执行一次 3放弃执行）',
+    concurrent      CHAR(1) DEFAULT '1' COMMENT '是否并发（0禁止 1允许）',
+    status          CHAR(1) DEFAULT '0' COMMENT '状态（0正常 1停用）',
+    create_by       VARCHAR(64) DEFAULT '' COMMENT '创建者',
+    create_time     DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_by       VARCHAR(64) DEFAULT '' COMMENT '更新者',
+    update_time     DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    remark          VARCHAR(500) DEFAULT NULL COMMENT '备注',
+    del_flag        CHAR(1) DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
+    PRIMARY KEY (job_id),
+    INDEX idx_job_name (job_name),
+    INDEX idx_job_group (job_group),
+    INDEX idx_job_status (status),
+    INDEX idx_job_del_flag (del_flag)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='定时任务表';
+
+-- ----------------------------
+-- 任务日志表
+-- ----------------------------
+DROP TABLE IF EXISTS sys_job_log;
+CREATE TABLE sys_job_log (
+    job_log_id      BIGINT NOT NULL AUTO_INCREMENT COMMENT '日志ID',
+    job_name        VARCHAR(64) NOT NULL COMMENT '任务名称',
+    job_group       VARCHAR(64) DEFAULT 'DEFAULT' COMMENT '任务分组',
+    job_class_name  VARCHAR(255) NOT NULL COMMENT '任务执行类全限定名',
+    cron_expression VARCHAR(128) NOT NULL COMMENT 'Cron表达式',
+    status          CHAR(1) DEFAULT '0' COMMENT '状态（0成功 1失败）',
+    error_msg       VARCHAR(2000) DEFAULT '' COMMENT '错误信息',
+    job_time        DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '执行时间',
+    create_time     DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (job_log_id),
+    INDEX idx_job_log_job_name (job_name),
+    INDEX idx_job_log_status (status),
+    INDEX idx_job_log_job_time (job_time)
+) ENGINE=InnoDB AUTO_INCREMENT=100000 COMMENT='任务日志表';

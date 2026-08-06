@@ -265,3 +265,52 @@ INSERT INTO sys_role_menu VALUES (2, 2);
 INSERT INTO sys_role_menu VALUES (2, 108);
 INSERT INTO sys_role_menu VALUES (2, 1081);
 INSERT INTO sys_role_menu VALUES (2, 109);
+
+-- ----------------------------
+-- 初始数据 - 定时任务
+-- ----------------------------
+INSERT INTO sys_job VALUES (1, '系统默认任务', 'DEFAULT', 'com.ruoyi.system.job.SampleJob', '0 0/30 * * * ?', '3', '1', '1', 'admin', NOW(), '', NULL, '示例定时任务', '0');
+
+-- ----------------------------
+-- 初始数据 - 定时任务菜单
+-- ----------------------------
+INSERT INTO sys_menu VALUES (110, '定时任务', 2, 3, 'job', 'monitor/job/index', '', 1, 0, 'C', '0', '0', 'monitor:job:list', 'job', 'admin', NOW(), '', NULL, '定时任务菜单', '0');
+
+INSERT INTO sys_menu VALUES (1101, '任务查询', 110, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:job:query', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1102, '任务新增', 110, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:job:add', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1103, '任务修改', 110, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:job:edit', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1104, '任务删除', 110, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:job:remove', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1105, '改变状态', 110, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:job:changeStatus', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1106, '立即执行', 110, 6, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:job:run', '#', 'admin', NOW(), '', NULL, '', '0');
+
+-- ----------------------------
+-- 初始数据 - 任务日志菜单
+-- ----------------------------
+INSERT INTO sys_menu VALUES (111, '任务日志', 2, 4, 'job/log', 'monitor/job/log/index', '', 1, 0, 'C', '0', '0', 'monitor:job:log:list', 'log', 'admin', NOW(), '', NULL, '任务日志菜单', '0');
+
+-- ----------------------------
+-- 初始数据 - 在线用户菜单
+-- ----------------------------
+INSERT INTO sys_menu VALUES (112, '在线用户', 2, 5, 'online', 'monitor/online/index', '', 1, 0, 'C', '0', '0', 'monitor:online:list', 'online', 'admin', NOW(), '', NULL, '在线用户菜单', '0');
+
+INSERT INTO sys_menu VALUES (1121, '强制下线', 112, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:online:remove', '#', 'admin', NOW(), '', NULL, '', '0');
+
+-- ----------------------------
+-- 初始数据 - 角色菜单关联 (管理员新增Stage4权限)
+-- ----------------------------
+INSERT INTO sys_role_menu VALUES (1, 110);
+INSERT INTO sys_role_menu VALUES (1, 1101);
+INSERT INTO sys_role_menu VALUES (1, 1102);
+INSERT INTO sys_role_menu VALUES (1, 1103);
+INSERT INTO sys_role_menu VALUES (1, 1104);
+INSERT INTO sys_role_menu VALUES (1, 1105);
+INSERT INTO sys_role_menu VALUES (1, 1106);
+INSERT INTO sys_role_menu VALUES (1, 111);
+INSERT INTO sys_role_menu VALUES (1, 112);
+INSERT INTO sys_role_menu VALUES (1, 1121);
+
+-- 普通角色只拥有查看权限
+INSERT INTO sys_role_menu VALUES (2, 110);
+INSERT INTO sys_role_menu VALUES (2, 1101);
+INSERT INTO sys_role_menu VALUES (2, 111);
+INSERT INTO sys_role_menu VALUES (2, 112);
