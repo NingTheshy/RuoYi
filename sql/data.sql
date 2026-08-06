@@ -314,3 +314,35 @@ INSERT INTO sys_role_menu VALUES (2, 110);
 INSERT INTO sys_role_menu VALUES (2, 1101);
 INSERT INTO sys_role_menu VALUES (2, 111);
 INSERT INTO sys_role_menu VALUES (2, 112);
+
+-- ----------------------------
+-- 初始数据 - 代码生成菜单
+-- ----------------------------
+INSERT INTO sys_menu VALUES (114, '代码生成', 1, 8, 'gen', 'tool/gen/index', '', 1, 0, 'C', '0', '0', 'tool:gen:list', 'code', 'admin', NOW(), '', NULL, '代码生成菜单', '0');
+
+INSERT INTO sys_menu VALUES (1141, '生成表查询', 114, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'tool:gen:query', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1142, '生成表新增', 114, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'tool:gen:add', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1143, '生成表修改', 114, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'tool:gen:edit', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1144, '生成表删除', 114, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'tool:gen:remove', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1145, '预览代码', 114, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'tool:gen:preview', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1146, '生成代码', 114, 6, '#', '', NULL, 1, 0, 'F', '0', '0', 'tool:gen:code', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1147, '同步表', 114, 7, '#', '', NULL, 1, 0, 'F', '0', '0', 'tool:gen:sync', '#', 'admin', NOW(), '', NULL, '', '0');
+
+-- ----------------------------
+-- 初始数据 - 角色菜单关联 (管理员新增代码生成权限)
+-- ----------------------------
+INSERT INTO sys_role_menu VALUES (1, 114);
+INSERT INTO sys_role_menu VALUES (1, 1141);
+INSERT INTO sys_role_menu VALUES (1, 1142);
+INSERT INTO sys_role_menu VALUES (1, 1143);
+INSERT INTO sys_role_menu VALUES (1, 1144);
+INSERT INTO sys_role_menu VALUES (1, 1145);
+INSERT INTO sys_role_menu VALUES (1, 1146);
+INSERT INTO sys_role_menu VALUES (1, 1147);
+
+-- ----------------------------
+-- 初始数据 - 服务监控菜单
+-- ----------------------------
+INSERT INTO sys_menu VALUES (113, '服务监控', 2, 6, 'server', 'monitor/server/index', '', 1, 0, 'C', '0', '0', 'monitor:server', 'server', 'admin', NOW(), '', NULL, '服务监控菜单', '0');
+
+INSERT INTO sys_role_menu VALUES (1, 113);

@@ -1,0 +1,71 @@
+package ${packageName}.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.domain.PageResult;
+import com.ruoyi.common.core.exception.ServiceException;
+import ${packageName}.convert.${className}Convert;
+import ${packageName}.domain.dto.req.${className}CreateReq;
+import ${packageName}.domain.dto.req.${className}QueryReq;
+import ${packageName}.domain.dto.req.${className}UpdateReq;
+import ${packageName}.domain.dto.resp.${className}Resp;
+import ${packageName}.domain.entity.${className};
+import ${packageName}.mapper.${className}Mapper;
+import ${packageName}.service.${className}Service;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.Arrays;
+
+@Service
+public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${className}> implements ${className}Service {
+
+    private final ${className}Convert convert;
+
+    public ${className}ServiceImpl(${className}Convert convert) {
+        this.convert = convert;
+    }
+
+    @Override
+    public PageResult<${className}Resp> get${className}Page(${className}QueryReq queryReq, Integer pageNum, Integer pageSize) {
+        ${className} query = convert.toEntity(queryReq);
+        Page<${className}> page = new Page<>(pageNum, pageSize);
+        LambdaQueryWrapper<${className}> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByAsc(${className}::getId);
+        Page<${className}> result = baseMapper.selectPage(page, wrapper);
+        return new PageResult<>(convert.toRespList(result.getRecords()), result.getTotal());
+    }
+
+    @Override
+    public ${className}Resp get${className}ById(Long id) {
+        ${className} entity = getById(id);
+        if (entity == null) {
+            throw new ServiceException(404, "${functionName}不存在");
+        }
+        return convert.toResp(entity);
+    }
+
+    @Override
+    @Transactional
+    public int create${className}(${className}CreateReq req) {
+        ${className} entity = convert.toEntity(req);
+        boolean result = save(entity);
+        return result ? 1 : 0;
+    }
+
+    @Override
+    @Transactional
+    public int update${className}(${className}UpdateReq req) {
+        ${className} entity = convert.toEntity(req);
+        boolean result = updateById(entity);
+        return result ? 1 : 0;
+    }
+
+    @Override
+    @Transactional
+    public int delete${className}ByIds(Long[] ids) {
+        return removeByIds(Arrays.asList(ids)) ? ids.length : 0;
+    }
+}

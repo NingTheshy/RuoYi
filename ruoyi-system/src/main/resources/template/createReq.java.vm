@@ -1,0 +1,19 @@
+package ${packageName}.domain.dto.req;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
+@Data
+@Schema(description = "${functionName}创建请求")
+public class ${className}CreateReq {
+
+#foreach($column in $insertColumns)
+#if($column.isRequired == 'Y' && $column.javaType == 'String')
+    @NotBlank(message = "${column.columnComment}不能为空")
+#end
+    @Schema(description = "${column.columnComment}")
+    private ${column.javaType} ${column.javaField};
+
+#end
+}

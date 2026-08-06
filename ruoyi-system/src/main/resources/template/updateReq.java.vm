@@ -1,0 +1,23 @@
+package ${packageName}.domain.dto.req;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Data
+@Schema(description = "${functionName}更新请求")
+public class ${className}UpdateReq {
+
+#foreach($column in $columns)
+#if($column.isPk == 'Y')
+    @NotNull(message = "${column.columnComment}不能为空")
+    @Schema(description = "${column.columnComment}", requiredMode = Schema.RequiredMode.REQUIRED)
+#elseif($column.isRequired == 'Y' && $column.javaType == 'String')
+    @NotBlank(message = "${column.columnComment}不能为空")
+    @Schema(description = "${column.columnComment}")
+#end
+    private ${column.javaType} ${column.javaField};
+
+#end
+}

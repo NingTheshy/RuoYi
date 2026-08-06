@@ -385,3 +385,58 @@ CREATE TABLE sys_job_log (
     INDEX idx_job_log_status (status),
     INDEX idx_job_log_job_time (job_time)
 ) ENGINE=InnoDB AUTO_INCREMENT=100000 COMMENT='任务日志表';
+
+-- ----------------------------
+-- 代码生成表
+-- ----------------------------
+DROP TABLE IF EXISTS sys_gen_table;
+CREATE TABLE sys_gen_table (
+    table_id          BIGINT NOT NULL AUTO_INCREMENT COMMENT '表ID',
+    table_name        VARCHAR(100) NOT NULL UNIQUE COMMENT '表名称',
+    table_comment     VARCHAR(500) DEFAULT '' COMMENT '表描述',
+    sub_table_name    VARCHAR(100) DEFAULT '' COMMENT '子表名称',
+    sub_table_fk_name VARCHAR(100) DEFAULT '' COMMENT '子表外键名称',
+    class_name        VARCHAR(100) DEFAULT '' COMMENT '实体类名称',
+    tpl_category      VARCHAR(20) DEFAULT 'crud' COMMENT '生成模板分类',
+    package_name      VARCHAR(100) DEFAULT '' COMMENT '包名称',
+    module_name       VARCHAR(30) DEFAULT '' COMMENT '模块名称',
+    business_name     VARCHAR(30) DEFAULT '' COMMENT '业务名称',
+    function_name     VARCHAR(50) DEFAULT '' COMMENT '功能名称',
+    function_author   VARCHAR(50) DEFAULT '' COMMENT '功能作者',
+    gen_type          CHAR(1) DEFAULT '0' COMMENT '生成方式（0zip包 1自定义路径）',
+    gen_path          VARCHAR(200) DEFAULT '/' COMMENT '生成路径',
+    options           TEXT DEFAULT NULL COMMENT '其他生成选项',
+    create_by         VARCHAR(64) DEFAULT '' COMMENT '创建者',
+    create_time       DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_by         VARCHAR(64) DEFAULT '' COMMENT '更新者',
+    update_time       DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (table_id),
+    INDEX idx_gen_table_name (table_name)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='代码生成表';
+
+-- ----------------------------
+-- 代码生成字段表
+-- ----------------------------
+DROP TABLE IF EXISTS sys_gen_table_column;
+CREATE TABLE sys_gen_table_column (
+    column_id     BIGINT NOT NULL AUTO_INCREMENT COMMENT '字段ID',
+    table_id      BIGINT NOT NULL COMMENT '表ID',
+    column_name   VARCHAR(100) NOT NULL COMMENT '字段名称',
+    column_comment VARCHAR(500) DEFAULT '' COMMENT '字段描述',
+    column_type   VARCHAR(100) DEFAULT '' COMMENT '字段类型',
+    java_type     VARCHAR(50) DEFAULT '' COMMENT 'Java类型',
+    java_field    VARCHAR(100) DEFAULT '' COMMENT 'Java字段名',
+    is_pk         CHAR(1) DEFAULT 'N' COMMENT '是否主键（Y是 N否）',
+    is_increment  CHAR(1) DEFAULT 'N' COMMENT '是否自增（Y是 N否）',
+    is_required   CHAR(1) DEFAULT 'N' COMMENT '是否必填（Y是 N否）',
+    is_insert     CHAR(1) DEFAULT 'Y' COMMENT '是否插入（Y是 N否）',
+    is_edit       CHAR(1) DEFAULT 'Y' COMMENT '是否编辑（Y是 N否）',
+    is_list       CHAR(1) DEFAULT 'Y' COMMENT '是否列表（Y是 N否）',
+    is_query      CHAR(1) DEFAULT 'N' COMMENT '是否查询（Y是 N否）',
+    query_type    VARCHAR(20) DEFAULT 'EQ' COMMENT '查询方式',
+    html_type     VARCHAR(20) DEFAULT 'input' COMMENT 'HTML类型',
+    dict_type     VARCHAR(100) DEFAULT '' COMMENT '字典类型',
+    sort          INT DEFAULT 0 COMMENT '排序号',
+    PRIMARY KEY (column_id),
+    INDEX idx_gen_column_table_id (table_id)
+) ENGINE=InnoDB AUTO_INCREMENT=1000 COMMENT='代码生成字段表';

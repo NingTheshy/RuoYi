@@ -1,0 +1,15 @@
+package ${packageName}.domain.dto.req;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+@Data
+@Schema(description = "${functionName}查询请求")
+public class ${className}QueryReq {
+
+#foreach($column in $queryColumns)
+    @Schema(description = "${column.columnComment}")
+    private ${column.javaType} ${column.javaField};
+
+#end
+}

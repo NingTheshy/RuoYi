@@ -1,0 +1,24 @@
+package ${packageName}.convert;
+
+import ${packageName}.domain.dto.req.${className}CreateReq;
+import ${packageName}.domain.dto.req.${className}QueryReq;
+import ${packageName}.domain.dto.req.${className}UpdateReq;
+import ${packageName}.domain.dto.resp.${className}Resp;
+import ${packageName}.domain.entity.${className};
+import org.mapstruct.Mapper;
+
+import java.util.List;
+
+@Mapper(config = MapStructMapperConfig.class)
+public interface ${className}Convert {
+
+    ${className} toEntity(${className}CreateReq req);
+
+    ${className} toEntity(${className}UpdateReq req);
+
+    ${className} toEntity(${className}QueryReq req);
+
+    ${className}Resp toResp(${className} entity);
+
+    List<${className}Resp> toRespList(List<${className}> entities);
+}

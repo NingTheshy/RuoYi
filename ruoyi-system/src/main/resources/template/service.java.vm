@@ -1,0 +1,20 @@
+package ${packageName}.service;
+
+import com.ruoyi.common.core.domain.PageResult;
+import ${packageName}.domain.dto.req.${className}CreateReq;
+import ${packageName}.domain.dto.req.${className}QueryReq;
+import ${packageName}.domain.dto.req.${className}UpdateReq;
+import ${packageName}.domain.dto.resp.${className}Resp;
+
+public interface ${className}Service {
+
+    PageResult<${className}Resp> get${className}Page(${className}QueryReq queryReq, Integer pageNum, Integer pageSize);
+
+    ${className}Resp get${className}ById(Long id);
+
+    int create${className}(${className}CreateReq req);
+
+    int update${className}(${className}UpdateReq req);
+
+    int delete${className}ByIds(Long[] ids);
+}

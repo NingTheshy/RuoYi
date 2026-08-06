@@ -1,0 +1,22 @@
+package ${packageName}.domain.entity;
+
+import com.baomidou.mybatisplus.annotation.*;
+import com.ruoyi.common.core.domain.BaseEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+@TableName("${tableName}")
+public class ${className} extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+#foreach($column in $columns)
+#if($column.isPk == 'Y')
+    @TableId(type = IdType.AUTO)
+#end
+    private ${column.javaType} ${column.javaField};
+
+#end
+}

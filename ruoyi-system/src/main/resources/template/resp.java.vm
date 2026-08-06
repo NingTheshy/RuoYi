@@ -1,0 +1,23 @@
+package ${packageName}.domain.dto.resp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+@Schema(description = "${functionName}响应")
+public class ${className}Resp {
+
+#foreach($column in $listColumns)
+    @Schema(description = "${column.columnComment}")
+#if($column.javaType == 'java.time.LocalDateTime')
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+#end
+    private ${column.javaType} ${column.javaField};
+
+#end
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime;
+}

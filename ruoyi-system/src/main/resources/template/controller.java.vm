@@ -1,0 +1,73 @@
+package com.ruoyi.admin.web.${moduleName};
+
+import com.ruoyi.common.core.annotation.OperLog;
+import com.ruoyi.common.core.domain.PageResult;
+import com.ruoyi.common.core.domain.R;
+import ${packageName}.domain.dto.req.${className}CreateReq;
+import ${packageName}.domain.dto.req.${className}QueryReq;
+import ${packageName}.domain.dto.req.${className}UpdateReq;
+import ${packageName}.domain.dto.resp.${className}Resp;
+import ${packageName}.service.${className}Service;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@Tag(name = "${functionName}")
+@SecurityRequirement(name = "BearerAuth")
+@RestController
+@RequestMapping("/${moduleName}/${businessName}")
+public class ${className}Controller {
+
+    private final ${className}Service service;
+
+    public ${className}Controller(${className}Service service) {
+        this.service = service;
+    }
+
+    @Operation(summary = "分页查询${functionName}列表")
+    @PreAuthorize("hasAuthority('${moduleName}:${businessName}:list')")
+    @GetMapping("/list")
+    public R<PageResult<${className}Resp>> list(@Valid @ParameterObject ${className}QueryReq queryReq,
+                                                 @RequestParam(defaultValue = "1") Integer pageNum,
+                                                 @RequestParam(defaultValue = "10") Integer pageSize) {
+        return R.ok(service.get${className}Page(queryReq, pageNum, pageSize));
+    }
+
+    @Operation(summary = "查询${functionName}详情")
+    @PreAuthorize("hasAuthority('${moduleName}:${businessName}:query')")
+    @GetMapping("/{id}")
+    public R<${className}Resp> getInfo(@PathVariable Long id) {
+        return R.ok(service.get${className}ById(id));
+    }
+
+    @OperLog(title = "${functionName}", businessType = "1")
+    @Operation(summary = "新增${functionName}")
+    @PreAuthorize("hasAuthority('${moduleName}:${businessName}:add')")
+    @PostMapping
+    public R<Void> add(@Valid @RequestBody ${className}CreateReq req) {
+        service.create${className}(req);
+        return R.ok();
+    }
+
+    @OperLog(title = "${functionName}", businessType = "2")
+    @Operation(summary = "修改${functionName}")
+    @PreAuthorize("hasAuthority('${moduleName}:${businessName}:edit')")
+    @PutMapping
+    public R<Void> edit(@Valid @RequestBody ${className}UpdateReq req) {
+        service.update${className}(req);
+        return R.ok();
+    }
+
+    @OperLog(title = "${functionName}", businessType = "3")
+    @Operation(summary = "删除${functionName}")
+    @PreAuthorize("hasAuthority('${moduleName}:${businessName}:remove')")
+    @DeleteMapping("/{ids}")
+    public R<Void> remove(@PathVariable Long[] ids) {
+        service.delete${className}ByIds(ids);
+        return R.ok();
+    }
+}
