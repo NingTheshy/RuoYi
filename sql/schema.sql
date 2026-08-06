@@ -244,3 +244,49 @@ CREATE TABLE sys_dict_data (
     INDEX idx_dict_data_status (status),
     INDEX idx_dict_data_del_flag (del_flag)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 COMMENT='字典数据表';
+
+-- ----------------------------
+-- 参数配置表
+-- ----------------------------
+DROP TABLE IF EXISTS sys_config;
+CREATE TABLE sys_config (
+    config_id    BIGINT NOT NULL AUTO_INCREMENT COMMENT '参数配置ID',
+    config_name  VARCHAR(100) NOT NULL COMMENT '参数名称',
+    config_key   VARCHAR(100) NOT NULL UNIQUE COMMENT '参数键名',
+    config_value VARCHAR(500) NOT NULL COMMENT '参数键值',
+    config_type  CHAR(1) DEFAULT 'N' COMMENT '系统内置（Y是 N否）',
+    status       CHAR(1) DEFAULT '0' COMMENT '状态（0正常 1停用）',
+    create_by    VARCHAR(64) DEFAULT '' COMMENT '创建者',
+    create_time  DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_by    VARCHAR(64) DEFAULT '' COMMENT '更新者',
+    update_time  DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    remark       VARCHAR(500) DEFAULT NULL COMMENT '备注',
+    del_flag     CHAR(1) DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
+    PRIMARY KEY (config_id),
+    INDEX idx_config_key (config_key),
+    INDEX idx_config_name (config_name),
+    INDEX idx_config_status (status),
+    INDEX idx_config_del_flag (del_flag)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='参数配置表';
+
+-- ----------------------------
+-- 通知公告表
+-- ----------------------------
+DROP TABLE IF EXISTS sys_notice;
+CREATE TABLE sys_notice (
+    notice_id      BIGINT NOT NULL AUTO_INCREMENT COMMENT '公告ID',
+    notice_title   VARCHAR(50) NOT NULL COMMENT '公告标题',
+    notice_type    CHAR(1) DEFAULT '1' COMMENT '公告类型（1通知 2公告）',
+    notice_content TEXT DEFAULT NULL COMMENT '公告内容',
+    status         CHAR(1) DEFAULT '0' COMMENT '状态（0正常 1停用）',
+    create_by      VARCHAR(64) DEFAULT '' COMMENT '创建者',
+    create_time    DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_by      VARCHAR(64) DEFAULT '' COMMENT '更新者',
+    update_time    DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    remark         VARCHAR(500) DEFAULT NULL COMMENT '备注',
+    del_flag       CHAR(1) DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
+    PRIMARY KEY (notice_id),
+    INDEX idx_notice_type (notice_type),
+    INDEX idx_notice_status (status),
+    INDEX idx_notice_del_flag (del_flag)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='通知公告表';

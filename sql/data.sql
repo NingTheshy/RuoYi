@@ -170,3 +170,58 @@ INSERT INTO sys_role_menu VALUES (2, 1041);
 INSERT INTO sys_role_menu VALUES (2, 105);
 INSERT INTO sys_role_menu VALUES (2, 1051);
 INSERT INTO sys_role_menu VALUES (2, 1055);
+
+-- ----------------------------
+-- 初始数据 - 参数配置
+-- ----------------------------
+INSERT INTO sys_config VALUES (1, '系统名称', 'sysName', 'RuoYi', 'Y', '0', 'admin', NOW(), '', NULL, '系统名称配置', '0');
+INSERT INTO sys_config VALUES (2, '系统版权', 'sysCopyright', 'Copyright 2026 RuoYi', 'Y', '0', 'admin', NOW(), '', NULL, '系统版权信息', '0');
+INSERT INTO sys_config VALUES (3, '系统Logo', 'sysLogo', '', 'Y', '0', 'admin', NOW(), '', NULL, '系统Logo路径', '0');
+INSERT INTO sys_config VALUES (4, '是否开启验证码', 'sysCaptchaEnabled', 'false', 'Y', '0', 'admin', NOW(), '', NULL, '登录验证码开关', '0');
+INSERT INTO sys_config VALUES (5, '密码策略', 'sysPasswordPolicy', 'medium', 'Y', '0', 'admin', NOW(), '', NULL, '密码复杂度策略', '0');
+
+-- ----------------------------
+-- 初始数据 - 通知公告
+-- ----------------------------
+INSERT INTO sys_notice VALUES (1, '欢迎使用RuoYi', '2', '<p>欢迎使用RuoYi权限管理系统！</p><p>系统提供用户管理、角色管理、菜单管理、部门管理等功能。</p>', '0', 'admin', NOW(), '', NULL, '系统欢迎公告', '0');
+INSERT INTO sys_notice VALUES (2, '系统升级通知', '1', '<p>系统将于今晚22:00进行升级维护，请提前保存数据。</p>', '0', 'admin', NOW(), '', NULL, '系统维护通知', '0');
+
+-- ----------------------------
+-- 初始数据 - 参数配置菜单
+-- ----------------------------
+INSERT INTO sys_menu VALUES (106, '参数配置', 1, 7, 'config', 'system/config/index', '', 1, 0, 'C', '0', '0', 'system:config:list', 'edit', 'admin', NOW(), '', NULL, '参数配置菜单', '0');
+
+INSERT INTO sys_menu VALUES (1061, '参数查询', 106, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'system:config:query', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1062, '参数新增', 106, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'system:config:add', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1063, '参数修改', 106, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'system:config:edit', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1064, '参数删除', 106, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'system:config:remove', '#', 'admin', NOW(), '', NULL, '', '0');
+
+-- ----------------------------
+-- 初始数据 - 通知公告菜单
+-- ----------------------------
+INSERT INTO sys_menu VALUES (107, '通知公告', 1, 8, 'notice', 'system/notice/index', '', 1, 0, 'C', '0', '0', 'system:notice:list', 'message', 'admin', NOW(), '', NULL, '通知公告菜单', '0');
+
+INSERT INTO sys_menu VALUES (1071, '公告查询', 107, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'system:notice:query', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1072, '公告新增', 107, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'system:notice:add', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1073, '公告修改', 107, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'system:notice:edit', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1074, '公告删除', 107, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'system:notice:remove', '#', 'admin', NOW(), '', NULL, '', '0');
+
+-- ----------------------------
+-- 初始数据 - 角色菜单关联 (管理员新增参数和公告菜单)
+-- ----------------------------
+INSERT INTO sys_role_menu VALUES (1, 106);
+INSERT INTO sys_role_menu VALUES (1, 1061);
+INSERT INTO sys_role_menu VALUES (1, 1062);
+INSERT INTO sys_role_menu VALUES (1, 1063);
+INSERT INTO sys_role_menu VALUES (1, 1064);
+INSERT INTO sys_role_menu VALUES (1, 107);
+INSERT INTO sys_role_menu VALUES (1, 1071);
+INSERT INTO sys_role_menu VALUES (1, 1072);
+INSERT INTO sys_role_menu VALUES (1, 1073);
+INSERT INTO sys_role_menu VALUES (1, 1074);
+
+-- 普通角色只拥有查看权限
+INSERT INTO sys_role_menu VALUES (2, 106);
+INSERT INTO sys_role_menu VALUES (2, 1061);
+INSERT INTO sys_role_menu VALUES (2, 107);
+INSERT INTO sys_role_menu VALUES (2, 1071);
