@@ -225,3 +225,43 @@ INSERT INTO sys_role_menu VALUES (2, 106);
 INSERT INTO sys_role_menu VALUES (2, 1061);
 INSERT INTO sys_role_menu VALUES (2, 107);
 INSERT INTO sys_role_menu VALUES (2, 1071);
+
+-- ----------------------------
+-- 初始数据 - 监控目录菜单
+-- ----------------------------
+INSERT INTO sys_menu VALUES (2, '监控管理', 0, 2, 'monitor', NULL, '', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', NOW(), '', NULL, '监控管理目录', '0');
+
+-- ----------------------------
+-- 初始数据 - 操作日志菜单
+-- ----------------------------
+INSERT INTO sys_menu VALUES (108, '操作日志', 2, 1, 'operlog', 'monitor/operlog/index', '', 1, 0, 'C', '0', '0', 'monitor:operlog:list', 'form', 'admin', NOW(), '', NULL, '操作日志菜单', '0');
+
+INSERT INTO sys_menu VALUES (1081, '日志查询', 108, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:operlog:query', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1082, '日志删除', 108, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:operlog:remove', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1083, '清空日志', 108, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:operlog:clean', '#', 'admin', NOW(), '', NULL, '', '0');
+
+-- ----------------------------
+-- 初始数据 - 登录日志菜单
+-- ----------------------------
+INSERT INTO sys_menu VALUES (109, '登录日志', 2, 2, 'logininfor', 'monitor/logininfor/index', '', 1, 0, 'C', '0', '0', 'monitor:logininfor:list', 'logininfor', 'admin', NOW(), '', NULL, '登录日志菜单', '0');
+
+INSERT INTO sys_menu VALUES (1091, '日志删除', 109, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:logininfor:remove', '#', 'admin', NOW(), '', NULL, '', '0');
+INSERT INTO sys_menu VALUES (1092, '清空日志', 109, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'monitor:logininfor:clean', '#', 'admin', NOW(), '', NULL, '', '0');
+
+-- ----------------------------
+-- 初始数据 - 角色菜单关联 (管理员新增监控日志菜单)
+-- ----------------------------
+INSERT INTO sys_role_menu VALUES (1, 2);
+INSERT INTO sys_role_menu VALUES (1, 108);
+INSERT INTO sys_role_menu VALUES (1, 1081);
+INSERT INTO sys_role_menu VALUES (1, 1082);
+INSERT INTO sys_role_menu VALUES (1, 1083);
+INSERT INTO sys_role_menu VALUES (1, 109);
+INSERT INTO sys_role_menu VALUES (1, 1091);
+INSERT INTO sys_role_menu VALUES (1, 1092);
+
+-- 普通角色只拥有查看权限
+INSERT INTO sys_role_menu VALUES (2, 2);
+INSERT INTO sys_role_menu VALUES (2, 108);
+INSERT INTO sys_role_menu VALUES (2, 1081);
+INSERT INTO sys_role_menu VALUES (2, 109);

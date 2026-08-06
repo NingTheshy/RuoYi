@@ -11,6 +11,7 @@ import com.ruoyi.system.domain.dto.resp.AuthInfoResp;
 import com.ruoyi.system.domain.dto.resp.LoginResp;
 import com.ruoyi.system.domain.entity.SysUser;
 import com.ruoyi.system.service.AuthService;
+import com.ruoyi.system.service.SysLoginLogService;
 import com.ruoyi.system.service.SysUserService;
 import com.ruoyi.system.service.SysUserRoleService;
 import com.ruoyi.system.service.support.AuthResponseBuilder;
@@ -30,19 +31,22 @@ public class AuthServiceImpl implements AuthService {
     private final SysUserRoleService userRoleService;
     private final AuthResponseBuilder authResponseBuilder;
     private final RuoyiProperties ruoyiProperties;
+    private final SysLoginLogService loginLogService;
 
     public AuthServiceImpl(LoginService loginService,
                            TokenService tokenService,
                            SysUserService userService,
                            SysUserRoleService userRoleService,
                            AuthResponseBuilder authResponseBuilder,
-                           RuoyiProperties ruoyiProperties) {
+                           RuoyiProperties ruoyiProperties,
+                           SysLoginLogService loginLogService) {
         this.loginService = loginService;
         this.tokenService = tokenService;
         this.userService = userService;
         this.userRoleService = userRoleService;
         this.authResponseBuilder = authResponseBuilder;
         this.ruoyiProperties = ruoyiProperties;
+        this.loginLogService = loginLogService;
     }
 
     @Override
@@ -55,22 +59,32 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResp login(LoginReq req, String requestIp) {
-        SysUser user = userService.getUserEntityByUserName(req.getUsername());
-        if (user == null) {
-            throw new ServiceException(401, "用户不存在或密码错误");
+        try {
+            SysUser user = userService.getUserEntityByUserName(req.getUsername());
+            if (user == null) {
+                loginLogService.recordLoginLog(req.getUsername(), requestIp, "1", "用户不存在或密码错误");
+                throw new ServiceException(401, "用户不存在或密码错误");
+            }
+
+            String token = loginService.login(
+                    req.getUsername(),
+                    req.getPassword(),
+                    String.valueOf(user.getUserId()),
+                    user.getPassword(),
+                    user.getStatus()
+            );
+
+            LoginResp loginResp = authResponseBuilder.buildLoginResp(user, token, requestIp);
+            userService.updateUserLoginInfo(user.getUserId(), requestIp);
+            loginLogService.recordLoginLog(req.getUsername(), requestIp, "0", "登录成功");
+            return loginResp;
+        } catch (ServiceException e) {
+            // 记录登录失败日志（避免重复记录已在上方处理的场景）
+            if (!"用户不存在或密码错误".equals(e.getMessage())) {
+                loginLogService.recordLoginLog(req.getUsername(), requestIp, "1", e.getMessage());
+            }
+            throw e;
         }
-
-        String token = loginService.login(
-                req.getUsername(),
-                req.getPassword(),
-                String.valueOf(user.getUserId()),
-                user.getPassword(),
-                user.getStatus()
-        );
-
-        LoginResp loginResp = authResponseBuilder.buildLoginResp(user, token, requestIp);
-        userService.updateUserLoginInfo(user.getUserId(), requestIp);
-        return loginResp;
     }
 
     @Override

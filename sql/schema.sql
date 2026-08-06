@@ -290,3 +290,52 @@ CREATE TABLE sys_notice (
     INDEX idx_notice_status (status),
     INDEX idx_notice_del_flag (del_flag)
 ) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='通知公告表';
+
+-- ----------------------------
+-- 操作日志表
+-- ----------------------------
+DROP TABLE IF EXISTS sys_oper_log;
+CREATE TABLE sys_oper_log (
+    oper_id         BIGINT NOT NULL AUTO_INCREMENT COMMENT '日志ID',
+    title           VARCHAR(50) DEFAULT '' COMMENT '操作模块',
+    business_type   CHAR(1) DEFAULT '0' COMMENT '业务类型（0其他 1新增 2修改 3删除）',
+    method          VARCHAR(100) DEFAULT '' COMMENT '方法名称',
+    request_method  VARCHAR(10) DEFAULT '' COMMENT '请求方式',
+    operator_type   CHAR(1) DEFAULT '0' COMMENT '操作类别（0其他 1后台用户 2手机端用户）',
+    oper_name       VARCHAR(50) DEFAULT '' COMMENT '操作人员',
+    dept_name       VARCHAR(50) DEFAULT '' COMMENT '部门名称',
+    oper_url        VARCHAR(255) DEFAULT '' COMMENT '请求URL',
+    oper_ip         VARCHAR(128) DEFAULT '' COMMENT '主机地址',
+    oper_location   VARCHAR(255) DEFAULT '' COMMENT '操作地点',
+    oper_param      VARCHAR(2000) DEFAULT '' COMMENT '请求参数',
+    json_result     VARCHAR(2000) DEFAULT '' COMMENT '返回参数',
+    status          INT DEFAULT 0 COMMENT '操作状态（0正常 1异常）',
+    error_msg       VARCHAR(2000) DEFAULT '' COMMENT '错误信息',
+    oper_time       DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
+    PRIMARY KEY (oper_id),
+    INDEX idx_oper_log_title (title),
+    INDEX idx_oper_log_oper_name (oper_name),
+    INDEX idx_oper_log_status (status),
+    INDEX idx_oper_log_oper_time (oper_time)
+) ENGINE=InnoDB AUTO_INCREMENT=100000 COMMENT='操作日志表';
+
+-- ----------------------------
+-- 登录日志表
+-- ----------------------------
+DROP TABLE IF EXISTS sys_login_log;
+CREATE TABLE sys_login_log (
+    info_id         BIGINT NOT NULL AUTO_INCREMENT COMMENT '日志ID',
+    user_name       VARCHAR(50) DEFAULT '' COMMENT '用户名称',
+    ip_addr         VARCHAR(128) DEFAULT '' COMMENT 'IP地址',
+    login_location  VARCHAR(255) DEFAULT '' COMMENT '登录地点',
+    browser         VARCHAR(50) DEFAULT '' COMMENT '浏览器类型',
+    os              VARCHAR(50) DEFAULT '' COMMENT '操作系统',
+    status          CHAR(1) DEFAULT '0' COMMENT '登录状态（0成功 1失败）',
+    msg             VARCHAR(255) DEFAULT '' COMMENT '提示信息',
+    login_time      DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '登录时间',
+    PRIMARY KEY (info_id),
+    INDEX idx_login_log_user_name (user_name),
+    INDEX idx_login_log_ip_addr (ip_addr),
+    INDEX idx_login_log_status (status),
+    INDEX idx_login_log_login_time (login_time)
+) ENGINE=InnoDB AUTO_INCREMENT=100000 COMMENT='登录日志表';
